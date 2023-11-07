@@ -6,12 +6,29 @@ const namesRouter = Router();
 //CRUD
 // ----- ALBUM ROUTES ----- \\
 // GET Endpoint "/names" - get all names with artist information
-namesRouter.get("/", (req, res) => {
-  const queryString = /*sql*/ `
-        SELECT * FROM names;
-    `;
+namesRouter.get("/", async (req, res) => {
+  // const pageNum = 3;
+  // const limit = 4;
 
-  connection.query(queryString, (err, results) => {
+  const pageNum = Number(req.query.page);
+  const limit = Number(req.query.pageSize);
+  const offset = (pageNum - 1) * limit;
+  let queryString = ``
+
+  if (isNaN(pageNum) || isNaN(limit)) {
+    queryString = /*sql*/ `
+          SELECT * FROM names;
+        `;
+  } else {
+    queryString = /*sql*/ `
+          SELECT * FROM names LIMIT ? OFFSET ?;
+        `;
+  }
+  // const queryString = /*sql*/ `
+  //       SELECT * FROM names LIMIT ? OFFSET ?;
+  //   `;
+
+  connection.query(queryString, [limit, offset], (err, results) => {
     if (err) {
       console.log(err);
       res.status(500).json({ error: "Der opstod en fejl ved forespørgslen." });

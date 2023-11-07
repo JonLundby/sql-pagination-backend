@@ -13,6 +13,7 @@ const dbConfig = {
 };
 
 const connection = mysql.createConnection(dbConfig);
+// const connection = await mysql.createConnection(dbConfig);
 
 connection.connect((err) => {
   if (err) {
