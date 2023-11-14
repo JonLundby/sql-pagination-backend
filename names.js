@@ -44,6 +44,7 @@ namesRouter.get("/:id", async (request, response) => {
   console.log(id);
   const query = "SELECT * FROM names WHERE id=?;";
   const values = [id];
+  
   connection.query(query, values, (err, results, fields) => {
     if (err) {
       console.log(err);
